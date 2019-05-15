@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    
+    <Properties>
+        <Property name="applicationName">Eyecon_Pic_Server</Property>
+        <property name="logdir">C:\app_data</property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="debugLogFile" fileName="${logdir}${sys:file.separator}${applicationName}${sys:file.separator}log${sys:file.separator}debugLogFile.log" 
+                     filePattern="${logdir}${sys:file.separator}${applicationName}${sys:file.separator}log${sys:file.separator}archive${sys:file.separator}${applicationName}${sys:file.separator}debugLogFile-%d{yyyy-MM-dd-HH:mm:ss:SSS}.log.gz">
+            <PatternLayout pattern="%d [%t] %-5p %c - %m%n" />
+            <SizeBasedTriggeringPolicy size="10 MB"/>
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL" />
+                <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="NEUTRAL" />
+            </Filters>
+        </RollingFile>
+        <RollingFile name="errorLogFile" fileName="${logdir}${sys:file.separator}${applicationName}${sys:file.separator}log${sys:file.separator}errorLogFile.log" 
+                     filePattern="${logdir}${sys:file.separator}${applicationName}${sys:file.separator}log${sys:file.separator}archive${sys:file.separator}${applicationName}${sys:file.separator}errorLogFile-%d{yyyy-MM-dd-HH:mm:ss:SSS}.log.gz">
+            <PatternLayout pattern="%d [%t] %-5p %c - %m%n" />
+            <SizeBasedTriggeringPolicy size="10 MB"/>
+        </RollingFile>
+    </Appenders>
+    
+    <Loggers>       
+        <!-- CXF is used heavily by Mule for web services -->
+        <AsyncLogger name="org.apache.cxf" level="WARN">
+            <AppenderRef ref="errorLogFile" level="ERROR"/>
+        </AsyncLogger>
+        <!-- Apache Commons tend to make a lot of noise which can clutter the log-->
+        <AsyncLogger name="org.apache" level="WARN">
+            <AppenderRef ref="errorLogFile" level="ERROR"/>
+        </AsyncLogger>
+        <!-- Reduce startup noise -->
+        <AsyncLogger name="org.springframework.beans.factory" level="WARN">
+            <AppenderRef ref="errorLogFile" level="ERROR"/>
+        </AsyncLogger>
+        
+        
+        <!-- Mule classes -->
+        <AsyncLogger name="app.pic.server" level="debug">
+            <AppenderRef ref="errorLogFile" level="ERROR"/>
+        </AsyncLogger>
+        <!--        <AsyncLogger name="app.pic.server" level="debug">
+            <AppenderRef ref="errorLogFile" level="ERROR"/>
+        </AsyncLogger>-->
+        <AsyncLogger name="app.pic.server" level="WARN">
+            <AppenderRef ref="errorLogFile" level="ERROR"/>
+        </AsyncLogger>
+        
+        
+        <!-- Reduce DM verbosity -->
+        <AsyncLogger name="org.jetel" level="WARN">
+            <AppenderRef ref="errorLogFile" level="ERROR"/>
+        </AsyncLogger>
+        <AsyncLogger name="Tracking" level="WARN">
+            <AppenderRef ref="errorLogFile" level="ERROR"/>
+        </AsyncLogger>
+        <!-- Sending normal debug logs to debugLogFile -->
+        <AsyncRoot level="info">
+            <AppenderRef ref="debugLogFile" />
+        </AsyncRoot>
+    </Loggers>
+</Configuration>

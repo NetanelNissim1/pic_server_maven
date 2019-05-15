@@ -1,0 +1,4 @@
+127.0.0.1 - - [15/May/2019:10:29:38 +0300] "HEAD /netbeans-tomcat-status-test HTTP/1.1" 404 -
+127.0.0.1 - - [15/May/2019:10:29:38 +0300] "GET /manager/text/ HTTP/1.1" 404 306
+127.0.0.1 - - [15/May/2019:10:29:39 +0300] "HEAD /netbeans-tomcat-status-test HTTP/1.1" 404 -
+127.0.0.1 - - [15/May/2019:10:29:39 +0300] "GET /manager/text/ HTTP/1.1" 404 306
